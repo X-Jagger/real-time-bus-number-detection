@@ -3,17 +3,11 @@ import cv2
 from darkflow.net.build import TFNet
 import matplotlib.pyplot as plt
 import numpy as np
+import imutils
 # %config InlineBackend.figure_format = 'svg'
 
 
 # define the model options and run
-
-# options = {
-#     'model': 'cfg/yolo.cfg',
-#     'load': 'bin/yolov2.weights',
-#     'threshold': 0.3,
-#     'gpu': 0.7
-# }
 options = {
     'model': 'cfg/yolo.cfg',
     'load': 'bin/yolov2.weights',
@@ -48,10 +42,11 @@ for color, result in zip(colors, results):
     text = '{}:{:.0f}%'.format(label,confidence*100)
     if (label == 'bus'):
         img = cv2.rectangle(img, tl, br, color, 7)
-        img = cv2.putText(img, text, tl, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
-# cv2.imshow('img', img)
-# cv2.waitKey()
-plt.imshow(img)
+        img = cv2.putText(img, text, tl, cv2.FONT_HERSHEY_COMPLEX, 10, (0, 0, 0), 22)
+img = imutils.resize(img, width=600)
+cv2.imshow('img', img)
+cv2.waitKey()
+# plt.imshow(img)
 # plt.show()
 # tl = (result[0]['topleft']['x'], result[0]['topleft']['y'])
 # br = (result[0]['bottomright']['x'], result[0]['bottomright']['y'])

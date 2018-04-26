@@ -7,12 +7,12 @@ option = {
     'model': 'cfg/yolo.cfg',
     'load': 'bin/yolov2.weights',
     'threshold': 0.5,
-    'gpu': 1.0
+    'gpu': 0.8
 }
 
 tfnet = TFNet(option)
 
-capture = cv2.VideoCapture('/home/leij/Videos/video1.mp4')
+capture = cv2.VideoCapture('/home/leij/Videos/bus-test.mp4')
 colors = [tuple(255 * np.random.rand(3)) for i in range(10)]
 
 # capture = cv2.VideoCapture(0)
@@ -25,15 +25,20 @@ while True:
     if ret:
         results = tfnet.return_predict(frame)
         for color, result in zip(colors, results):
+            
             tl = (result['topleft']['x'], result['topleft']['y'])
             br = (result['bottomright']['x'], result['bottomright']['y'])
             label = result['label']
             confidence = result['confidence']
             text = '{}:{:.0f}%'.format(label,confidence*100)
             if (label == 'bus'):
+                # busROI
+                busROI = frame[tl[1]:br[1],tl[0]:br[0]]
+
                 frame = cv2.rectangle(frame, tl, br, color, 7)
                 frame = cv2.putText(frame, text, tl, cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 2)
-                # 对图像做数字鉴定：
+                # 定位数字框
+                
                 break
 
         cv2.imshow('frame', frame)
